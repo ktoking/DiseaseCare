@@ -5,6 +5,8 @@ import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,6 +31,17 @@ public class BaseController {
             BusinessException BusinessException = (BusinessException)ex;
             responseData.put("errorCode", BusinessException.getErrorCode());
             responseData.put("errorMsg", BusinessException.getErrorMsg());
+        } else if(ex instanceof MethodArgumentNotValidException){
+            MethodArgumentNotValidException methodArgumentNotValidException = (MethodArgumentNotValidException)ex;
+            StringBuilder b = new StringBuilder();
+            for (ObjectError error : methodArgumentNotValidException.getBindingResult().getAllErrors()) {
+                //获取校验的信息
+                b.append(error.getDefaultMessage()).append(" ");
+            }
+            b.deleteCharAt(b.length()-1);
+
+            responseData.put("errorCode",11000);
+            responseData.put("errorMsg",b.toString());
         } else {
             responseData.put("errorCode", EmBusinessError.UNKNOWN_ERROR.getErrorCode());
             responseData.put("errorMsg", EmBusinessError.UNKNOWN_ERROR.getErrorMsg());

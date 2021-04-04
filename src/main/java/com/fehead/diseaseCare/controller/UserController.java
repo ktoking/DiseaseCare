@@ -13,13 +13,13 @@ import com.fehead.diseaseCare.utility.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -43,7 +43,7 @@ public class UserController extends BaseController{
 
 
     @ApiOperation(value = "测试方法")
-    @RequestMapping("/test")
+    @GetMapping("/test")
     @UserLoginToken
     public CommonReturnType test() {
         int userIdByToken = JwtUtil.getUserIdByToken();
@@ -54,7 +54,7 @@ public class UserController extends BaseController{
 
 
     @ApiOperation(value = "用户登录")
-    @RequestMapping("/login")
+    @GetMapping("/login")
     @PassToken
     public CommonReturnType login(@RequestBody User user) throws BusinessException {
         if(StringUtils.isEmpty(user.getPhone())||StringUtils.isEmpty(user.getPassword())){
@@ -65,8 +65,18 @@ public class UserController extends BaseController{
         if(findUser==null){
             throw new BusinessException(EmBusinessError.USER_AUTH_ERROR);
         }
-        String token=userService.makeToken(findUser);
+        String token = JwtUtil.makeToken(findUser);
         return CommonReturnType.creat(token);
+    }
+
+    @ApiOperation(value = "用户注册")
+    @PostMapping("/create")
+    @PassToken
+    public CommonReturnType create(@Valid @RequestBody UserAuthModel newUser) throws BusinessException {
+        User user=new User();
+        BeanUtils.copyProperties(newUser,user);
+        User insertUser = userService.createUser(user);
+        return CommonReturnType.creat(insertUser);
     }
 
 }

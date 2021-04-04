@@ -12,8 +12,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-03-21
  */
 public interface IUserService extends IService<User> {
-
-    String makeToken(User user) ;
+    // 注册用户
+    User createUser(User newUser);
     // 通过账户密码来登录
     User queryUserByUserInfo(User user);
 }
