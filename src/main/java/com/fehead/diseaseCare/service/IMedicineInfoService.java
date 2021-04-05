@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMedicineInfoService extends IService<MedicineInfo> {
 
+    MedicineInfo insertDepartment(MedicineInfo medicineInfo);
 }

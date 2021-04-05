@@ -56,7 +56,7 @@ public class UserController extends BaseController{
     private FtpUtil ftpUtil;
 
     @Autowired
-    HttpServletRequest req;
+    private HttpServletRequest req;
 
     @Autowired
     private IUserService userService;
@@ -91,7 +91,7 @@ public class UserController extends BaseController{
     @ApiOperation(value = "用户登录")
     @GetMapping("/login")
     @PassToken
-    public CommonReturnType login(@RequestBody UserAuthReq userAuth) throws BusinessException {
+    public CommonReturnType login(@RequestBody @Valid UserAuthReq userAuth) throws BusinessException {
         if(StringUtils.isEmpty(userAuth.getPhone())||StringUtils.isEmpty(userAuth.getPassword())){
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }

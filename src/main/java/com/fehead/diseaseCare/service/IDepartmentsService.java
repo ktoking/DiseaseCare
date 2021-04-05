@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDepartmentsService extends IService<Departments> {
 
+    // 新增科室
+    Departments insertDepartment(Departments department);
+
 }
