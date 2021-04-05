@@ -2,49 +2,42 @@ package com.fehead.diseaseCare.controller.vo.req;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 public class UserInsertReq {
+
+
     @ApiModelProperty(value = "姓名")
-    @NotBlank
+    @NotBlank(message = "姓名不能为空")
     private String name;
 
     @ApiModelProperty(value = "性别：1男0女")
-    @NotNull
+    @NotNull(message = "性别不能为空")
     private Integer sex;
 
     @ApiModelProperty(value = "账号密码")
-    @NotBlank
+    @NotBlank(message = "账号密码不能为空")
     private String password;
 
     @ApiModelProperty(value = "生日")
-    @NotBlank
+    @NotNull(message = "生日不能为空")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime birthday;
 
     @ApiModelProperty(value = "邮箱")
+    @NotBlank(message = "邮箱不能为空")
     private String email;
 
     @ApiModelProperty(value = "手机号")
+    @NotBlank(message = "手机号不能为空")
     private String phone;
-
-    @ApiModelProperty(value = "状态 0正常(默认)  1注销 2住院 ")
-    private Integer status;
-
-    @ApiModelProperty(value = "账号创建日期")
-    private LocalDateTime createTime;
-
-    @ApiModelProperty(value = "所属身份id")
-    private Integer belongId;
 
     @ApiModelProperty(value = "0:代表病人 1:代表医生")
     private Integer role;
-
-    @ApiModelProperty(value = "余额")
-    private BigDecimal price;
 
 }

@@ -50,7 +50,7 @@ public class GeneratorMybatisPlus {
         // 【实体】是否为lombok模型（默认 false）
         strategy.setEntityLombokModel(true);
         // 需要包含的表名，允许正则表达式（与exclude二选一配置）
-        strategy.setInclude("patient_health"); // 当不指定表,默认生成所有表对应文件
+//        strategy.setInclude("patient_health"); // 当不指定表,默认生成所有表对应文件
         mpg.setStrategy(strategy);
 
         mpg.execute();

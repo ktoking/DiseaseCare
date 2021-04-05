@@ -46,3 +46,4 @@ gen/
 logs/
 log
 temp/
+/src/main/resources/application-prod.yml

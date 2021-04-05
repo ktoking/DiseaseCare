@@ -11,7 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Hello world!
  *
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com")
 @EnableTransactionManagement //开启声明式事务
 @MapperScan("com.fehead.diseaseCare.mapper")
 @EnableSwagger2

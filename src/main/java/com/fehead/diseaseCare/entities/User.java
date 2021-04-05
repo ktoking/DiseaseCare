@@ -1,15 +1,16 @@
 package com.fehead.diseaseCare.entities;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,7 +18,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ktoking
- * @since 2021-03-21
+ * @since 2021-04-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -38,9 +39,6 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "头像")
     private String avatar;
-
-    @ApiModelProperty(value = "账号")
-    private String account;
 
     @ApiModelProperty(value = "账号密码")
     private String password;
@@ -73,7 +71,7 @@ public class User implements Serializable {
     private Integer floor;
 
     @ApiModelProperty(value = "东南西北")
-    private Integer area;
+    private String area;
 
     @ApiModelProperty(value = "病人代表病房号，医生代表办公室号")
     private String roomName;

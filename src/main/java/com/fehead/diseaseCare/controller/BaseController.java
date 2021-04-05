@@ -5,6 +5,7 @@ import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,6 +41,16 @@ public class BaseController {
             }
             b.deleteCharAt(b.length()-1);
 
+            responseData.put("errorCode",11000);
+            responseData.put("errorMsg",b.toString());
+        } else if(ex instanceof BindException){
+            BindException bindException = (BindException)ex;
+            StringBuilder b = new StringBuilder();
+            for (ObjectError error : bindException.getBindingResult().getAllErrors()) {
+                //获取校验的信息
+                b.append(error.getDefaultMessage()).append(" ");
+            }
+            b.deleteCharAt(b.length()-1);
             responseData.put("errorCode",11000);
             responseData.put("errorMsg",b.toString());
         } else {
