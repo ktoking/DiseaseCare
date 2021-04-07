@@ -41,13 +41,13 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
         QueryWrapper<OrderInfo> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("begin_time", orderInfo.getBeginTime());
-
         Integer num = orderInfoMapper.selectCount(queryWrapper);
-        orderInfo.setNumber(num++);
+        orderInfo.setNumber(++num);
+
         int insert = orderInfoMapper.insert(orderInfo);
 //        LocalDateTime today_start = LocalDateTime.of(orderInfo.getBeginTime().toLocalDate(), LocalTime.MIN);
 //        LocalDateTime today_end = LocalDateTime.of(orderInfo.getBeginTime().toLocalDate(), LocalTime.MAX);//当天零点
-        return null;
+        return orderInfo;
     }
 
 }
