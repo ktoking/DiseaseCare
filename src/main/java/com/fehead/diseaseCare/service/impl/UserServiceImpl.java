@@ -1,19 +1,26 @@
 package com.fehead.diseaseCare.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fehead.diseaseCare.entities.Departments;
 import com.fehead.diseaseCare.entities.User;
+import com.fehead.diseaseCare.entities.model.UserDoctor;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
+import com.fehead.diseaseCare.mapper.DepartmentsMapper;
 import com.fehead.diseaseCare.mapper.UserMapper;
 import com.fehead.diseaseCare.service.IUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -28,6 +35,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private DepartmentsMapper departmentsMapper;
 
 
     @Override
@@ -75,5 +85,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new BusinessException(EmBusinessError.DATA_UPDATE_ERROR);
         }
         return update;
+    }
+
+    @Override
+    public List<UserDoctor> queryAllDoctor() {
+        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("role",1);
+        List<User> users = userMapper.selectList(queryWrapper);
+        List<UserDoctor> userDoctors=new ArrayList<>();
+
+        for (User user : users) {
+            UserDoctor userDoctor=new UserDoctor();
+            QueryWrapper<Departments> departmentsQueryWrapper=new QueryWrapper<>();
+            departmentsQueryWrapper.eq("id",user.getDepartmentId());
+            Departments departments = departmentsMapper.selectOne(departmentsQueryWrapper);
+            BeanUtils.copyProperties(user,userDoctor);
+            userDoctor.setDepartments(departments);
+            userDoctors.add(userDoctor);
+        }
+        return userDoctors;
     }
 }

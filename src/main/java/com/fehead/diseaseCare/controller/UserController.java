@@ -9,6 +9,7 @@ import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
 import com.fehead.diseaseCare.controller.vo.req.UserInsertReq;
 import com.fehead.diseaseCare.controller.vo.req.UserRoleInfoReq;
 import com.fehead.diseaseCare.entities.User;
+import com.fehead.diseaseCare.entities.model.UserDoctor;
 import com.fehead.diseaseCare.entities.model.UserIdRoleInfo;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
@@ -37,6 +38,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * <p>
@@ -69,6 +71,14 @@ public class UserController extends BaseController{
         int userIdByToken = JwtUtil.getUserIdByToken().getUserId();
         UserAuthReq userAuth=new UserAuthReq();
         return CommonReturnType.creat(userAuth);
+    }
+
+    @ApiOperation(value = "获取所有医生信息")
+    @GetMapping("/getAllDoctors")
+    @UserLoginToken
+    public CommonReturnType getAllDoctors() {
+        List<UserDoctor> userDoctors = userService.queryAllDoctor();
+        return CommonReturnType.creat(userDoctors);
     }
 
     @ApiOperation(value = "用户充值")

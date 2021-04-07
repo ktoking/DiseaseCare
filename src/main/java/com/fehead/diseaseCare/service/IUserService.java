@@ -2,8 +2,10 @@ package com.fehead.diseaseCare.service;
 
 import com.fehead.diseaseCare.entities.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fehead.diseaseCare.entities.model.UserDoctor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>
@@ -22,4 +24,6 @@ public interface IUserService extends IService<User> {
     int completeUserInfo(User user);
     // 用户充钱
     boolean chargeMoney(BigDecimal money,Integer userId);
+
+    List<UserDoctor> queryAllDoctor();
 }
