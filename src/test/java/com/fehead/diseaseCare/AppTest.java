@@ -1,6 +1,9 @@
 package com.fehead.diseaseCare;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fehead.diseaseCare.entities.OrderInfo;
 import com.fehead.diseaseCare.entities.User;
+import com.fehead.diseaseCare.mapper.OrderInfoMapper;
 import com.fehead.diseaseCare.service.IUserService;
 import com.fehead.diseaseCare.utility.RedisUtil;
 import org.junit.Test;
@@ -32,6 +35,9 @@ public class AppTest
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private OrderInfoMapper orderInfoMapper;
+
     @Test
     public void insertUserTest(){
         User user=new User();
@@ -46,6 +52,14 @@ public class AppTest
         user.setCreateTime(Timestamp.from(Instant.now()).toLocalDateTime());
         user.setPrice(new BigDecimal("0"));
         userService.createUser(user);
+    }
+
+    @Test
+    public void getOrderInfo(){
+        QueryWrapper<OrderInfo> queryWrapper=new QueryWrapper();
+        queryWrapper.eq("id",1);
+        OrderInfo orderInfo = orderInfoMapper.selectOne(queryWrapper);
+        System.out.println(orderInfo);
     }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * <p>
@@ -43,11 +44,27 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         queryWrapper.eq("begin_time", orderInfo.getBeginTime());
         Integer num = orderInfoMapper.selectCount(queryWrapper);
         orderInfo.setNumber(++num);
+        try {
+            int insert = orderInfoMapper.insert(orderInfo);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_INSERT_ERROR,e.getMessage());
+        }
 
-        int insert = orderInfoMapper.insert(orderInfo);
 //        LocalDateTime today_start = LocalDateTime.of(orderInfo.getBeginTime().toLocalDate(), LocalTime.MIN);
 //        LocalDateTime today_end = LocalDateTime.of(orderInfo.getBeginTime().toLocalDate(), LocalTime.MAX);//当天零点
         return orderInfo;
     }
 
+    @Override
+    public List<OrderInfo> getOrderPatient(Integer userId, LocalDateTime begainTime) {
+        QueryWrapper<OrderInfo> infoQueryWrapper=new QueryWrapper<>();
+        infoQueryWrapper.eq("doctor_id",userId).eq("begin_time",begainTime).eq("status",2).orderByAsc("number");
+        List<OrderInfo> orderInfos=null;
+        try {
+            orderInfos = orderInfoMapper.selectList(infoQueryWrapper);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR,e.getMessage());
+        }
+        return orderInfos;
+    }
 }

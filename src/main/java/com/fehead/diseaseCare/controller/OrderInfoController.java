@@ -1,6 +1,7 @@
 package com.fehead.diseaseCare.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.controller.vo.req.OrderInfoReq;
 import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
@@ -11,15 +12,20 @@ import com.fehead.diseaseCare.service.IOrderInfoService;
 import com.fehead.diseaseCare.utility.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * <p>
@@ -52,10 +58,22 @@ public class OrderInfoController extends BaseController{
         orderInfo.setPatientId(userIdByToken.getUserId());
         orderInfo.setBeginTime(today_start);
         orderInfo.setEndTime(today_end);
-        orderInfo.setStatus(0);
+        orderInfo.setStatus(2);
         orderInfo.setCreateTime(LocalDateTime.now());
         OrderInfo insertData = orderInfoService.makeAppoinment(orderInfo);
         return CommonReturnType.creat(insertData);
+    }
+
+    @ApiOperation(value = "获取当天所有挂过当前医生号的病人")
+    @GetMapping("/getOrderPatient")
+    @UserLoginToken
+    public CommonReturnType getOrderPatient(@RequestParam("beginTime") @NotNull(message = "时间不能为空") String beginTime) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime parse = LocalDateTime.parse(beginTime, df);
+        LocalDateTime today_end = LocalDateTime.of(parse.toLocalDate(), LocalTime.MIN);//当天零点
+        UserIdRoleInfo userIdByToken = JwtUtil.getUserIdByToken();
+        List<OrderInfo> orderInfoList = orderInfoService.getOrderPatient(userIdByToken.getUserId(),today_end);
+        return CommonReturnType.creat(orderInfoList);
     }
 }
 

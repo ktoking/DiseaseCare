@@ -3,6 +3,9 @@ package com.fehead.diseaseCare.service;
 import com.fehead.diseaseCare.entities.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -14,4 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IOrderInfoService extends IService<OrderInfo> {
 
     OrderInfo makeAppoinment(OrderInfo orderInfo);
+
+    List<OrderInfo> getOrderPatient(Integer userId, LocalDateTime begainTime);
 }
