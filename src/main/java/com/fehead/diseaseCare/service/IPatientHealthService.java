@@ -3,6 +3,8 @@ package com.fehead.diseaseCare.service;
 import com.fehead.diseaseCare.entities.PatientHealth;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPatientHealthService extends IService<PatientHealth> {
 
+    List<PatientHealth> getPatientCollectData(Integer patientId);
 }

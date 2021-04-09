@@ -9,12 +9,13 @@ import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
 import com.fehead.diseaseCare.controller.vo.req.UserInsertReq;
 import com.fehead.diseaseCare.controller.vo.req.UserRoleInfoReq;
 import com.fehead.diseaseCare.entities.User;
-import com.fehead.diseaseCare.entities.model.UserDoctor;
+import com.fehead.diseaseCare.entities.model.UserBaseInfo;
 import com.fehead.diseaseCare.entities.model.UserIdRoleInfo;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IUserService;
+import com.fehead.diseaseCare.utility.DateUtil;
 import com.fehead.diseaseCare.utility.FtpUtil;
 import com.fehead.diseaseCare.utility.IDUtils;
 import com.fehead.diseaseCare.utility.JwtUtil;
@@ -31,13 +32,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,9 +60,6 @@ public class UserController extends BaseController{
     private FtpUtil ftpUtil;
 
     @Autowired
-    private HttpServletRequest req;
-
-    @Autowired
     private IUserService userService;
 
 
@@ -77,7 +76,7 @@ public class UserController extends BaseController{
     @GetMapping("/getAllDoctors")
     @UserLoginToken
     public CommonReturnType getAllDoctors() {
-        List<UserDoctor> userDoctors = userService.queryAllDoctor();
+        List<UserBaseInfo> userDoctors = userService.queryAllDoctor();
         return CommonReturnType.creat(userDoctors);
     }
 
@@ -122,10 +121,21 @@ public class UserController extends BaseController{
     public CommonReturnType create(@RequestParam("avatar") MultipartFile avatar,@Valid UserInsertReq newUser) throws BusinessException, SftpException, JSchException, JsonProcessingException {
         User user=new User();
         BeanUtils.copyProperties(newUser,user);
+
+        SimpleDateFormat sft = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try{
+            date = sft.parse(newUser.getBirthday().toLocalDate().toString());
+        }catch(Exception e){
+            throw  new BusinessException(EmBusinessError.COMMON_ERROR,"时间转化异常");
+        }
+        int age = DateUtil.getAgeByBirth(date);
+
         Object result = uploadPicture(avatar);
         String cover = new ObjectMapper().writeValueAsString(result);
         String avatarUrl= cover.replace("\"", "");
         user.setAvatar(avatarUrl);
+        user.setAge(age);
         User insertUser = userService.createUser(user);
         return CommonReturnType.creat(insertUser);
     }
@@ -140,6 +150,15 @@ public class UserController extends BaseController{
         user.setId(userIdByToken.getUserId());
         int update = userService.completeUserInfo(user);
         return CommonReturnType.creat(update);
+    }
+
+    @ApiOperation(value = "获取当前医生下的所有病人信息(非出院)")
+    @GetMapping("/getAllPatientByDoctorId")
+    @UserLoginToken
+    public CommonReturnType getAllPatientByDoctorId() {
+        int userIdByToken = JwtUtil.getUserIdByToken().getUserId();
+        List<UserBaseInfo>patientList=userService.getAllPatientByDoctorId(userIdByToken);
+        return CommonReturnType.creat(patientList);
     }
 
     // 上传图片拿到地址

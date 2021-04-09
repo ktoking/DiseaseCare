@@ -85,5 +85,7 @@ public class User implements Serializable {
     @ApiModelProperty(value = "病人:所属于哪个医生，医生:所属于哪个boss")
     private Integer managerId;
 
+    @ApiModelProperty(value = "年龄")
+    private Integer age;
 
 }

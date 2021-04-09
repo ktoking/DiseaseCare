@@ -1,11 +1,16 @@
 package com.fehead.diseaseCare.entities.model;
 
 import com.fehead.diseaseCare.entities.Departments;
+import com.fehead.diseaseCare.utility.DateUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 @Data
-public class UserDoctor {
+public class UserBaseInfo {
 
     private Integer id;
 
@@ -17,6 +22,12 @@ public class UserDoctor {
 
     @ApiModelProperty(value = "头像")
     private String avatar;
+
+    @ApiModelProperty(value = "手机号")
+    private String phone;
+
+    @ApiModelProperty(value = "手机号")
+    private Integer age;
 
     @ApiModelProperty(value = "所在楼层")
     private Integer floor;

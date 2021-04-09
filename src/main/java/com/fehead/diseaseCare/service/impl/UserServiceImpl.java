@@ -1,6 +1,5 @@
 package com.fehead.diseaseCare.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -8,7 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWra
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fehead.diseaseCare.entities.Departments;
 import com.fehead.diseaseCare.entities.User;
-import com.fehead.diseaseCare.entities.model.UserDoctor;
+import com.fehead.diseaseCare.entities.model.UserBaseInfo;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.DepartmentsMapper;
@@ -88,14 +87,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public List<UserDoctor> queryAllDoctor() {
+    public List<UserBaseInfo> queryAllDoctor() {
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("role",1);
         List<User> users = userMapper.selectList(queryWrapper);
-        List<UserDoctor> userDoctors=new ArrayList<>();
+        List<UserBaseInfo> userDoctors=new ArrayList<>();
 
         for (User user : users) {
-            UserDoctor userDoctor=new UserDoctor();
+            UserBaseInfo userDoctor=new UserBaseInfo();
             QueryWrapper<Departments> departmentsQueryWrapper=new QueryWrapper<>();
             departmentsQueryWrapper.eq("id",user.getDepartmentId());
             Departments departments = departmentsMapper.selectOne(departmentsQueryWrapper);
@@ -104,5 +103,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             userDoctors.add(userDoctor);
         }
         return userDoctors;
+    }
+
+    @Override
+    public List<UserBaseInfo> getAllPatientByDoctorId(int doctorId) {
+        List<UserBaseInfo> resultList=new ArrayList<>();
+        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("role",0).eq("manager_id",doctorId).ne("status",1);
+        List<User> users =null;
+        try {
+            users=userMapper.selectList(queryWrapper);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR);
+        }
+        for (User user : users) {
+            UserBaseInfo userBaseInfo=new UserBaseInfo();
+            BeanUtils.copyProperties(user,userBaseInfo);
+            resultList.add(userBaseInfo);
+        }
+        return resultList;
     }
 }

@@ -3,6 +3,8 @@ package com.fehead.diseaseCare.service;
 import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -14,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IMedicineInfoService extends IService<MedicineInfo> {
 
     MedicineInfo insertDepartment(MedicineInfo medicineInfo);
+
+    List<MedicineInfo> getMedicineByName(String medicineName);
 }

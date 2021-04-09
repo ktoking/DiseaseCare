@@ -1,5 +1,6 @@
 package com.fehead.diseaseCare.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
@@ -8,6 +9,8 @@ import com.fehead.diseaseCare.service.IMedicineInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,5 +34,18 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
             new BusinessException(EmBusinessError.DATA_INSERT_ERROR);
         }
         return medicineInfo;
+    }
+
+    @Override
+    public List<MedicineInfo> getMedicineByName(String medicineName) {
+        QueryWrapper<MedicineInfo>  queryWrapper=new QueryWrapper<>();
+        queryWrapper.likeRight("medicine_name",medicineName);
+        List<MedicineInfo> medicineInfoList =null;
+        try {
+            medicineInfoList= medicineInfoMapper.selectList(queryWrapper);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR);
+        }
+        return medicineInfoList;
     }
 }

@@ -1,6 +1,7 @@
 package com.fehead.diseaseCare.controller;
 
 
+import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.fehead.diseaseCare.response.CommonReturnType;
@@ -9,11 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * <p>
@@ -38,6 +39,15 @@ public class MedicineInfoController extends BaseController{
         MedicineInfo  medicineInfoVO= medicineInfoService.insertDepartment(medicineInfo);
         return CommonReturnType.creat(medicineInfoVO);
     }
+
+    @ApiOperation(value = "根据药名模糊查找药品")
+    @GetMapping("/getMedicineByName/{medicineName}")
+    @UserLoginToken
+    public CommonReturnType getMedicineByName(@PathVariable("medicineName") @NotNull(message = "药品名不能为空") String medicineName) {
+        List<MedicineInfo> medicineInfoList=medicineInfoService.getMedicineByName(medicineName);
+        return CommonReturnType.creat(medicineInfoList);
+    }
+
 
 }
 
