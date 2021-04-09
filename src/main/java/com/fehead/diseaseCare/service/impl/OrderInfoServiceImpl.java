@@ -1,6 +1,9 @@
 package com.fehead.diseaseCare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.fehead.diseaseCare.entities.OrderInfo;
 import com.fehead.diseaseCare.entities.User;
 import com.fehead.diseaseCare.error.BusinessException;
@@ -8,6 +11,7 @@ import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.OrderInfoMapper;
 import com.fehead.diseaseCare.service.IOrderInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,5 +70,22 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR,e.getMessage());
         }
         return orderInfos;
+    }
+
+    @Override
+    public OrderInfo updateOrderStatus(OrderInfo orderInfo) {
+        QueryWrapper<OrderInfo> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("patient_id",orderInfo.getPatientId()).eq("doctor_id",orderInfo.getDoctorId()).eq("begin_time",orderInfo.getBeginTime()).eq("number",orderInfo.getNumber()).eq("status",2);
+        OrderInfo findOrder = orderInfoMapper.selectOne(queryWrapper);
+        if(findOrder==null){
+            throw new BusinessException(EmBusinessError.COMMON_ERROR,"预约单不存在");
+        }
+        findOrder.setStatus(1);
+        try {
+            int update = orderInfoMapper.updateById(findOrder);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_UPDATE_ERROR);
+        }
+        return findOrder;
     }
 }

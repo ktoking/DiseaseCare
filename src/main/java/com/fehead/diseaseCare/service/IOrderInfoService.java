@@ -19,4 +19,6 @@ public interface IOrderInfoService extends IService<OrderInfo> {
     OrderInfo makeAppoinment(OrderInfo orderInfo);
 
     List<OrderInfo> getOrderPatient(Integer userId, LocalDateTime begainTime);
+
+    OrderInfo updateOrderStatus(OrderInfo orderInfo);
 }
