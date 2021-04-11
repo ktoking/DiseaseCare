@@ -24,11 +24,11 @@ public class GeneratorMybatisPlus {
 
         //数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://39.96.86.4:3301/DiseaseCare?characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong");
+        dsc.setUrl("jdbc:mysql://127.0.0.1:3301/DiseaseCare?characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("kaikai");
+        dsc.setPassword("root");
         dsc.setDbType(DbType.MYSQL);
         mpg.setDataSource(dsc);
 
