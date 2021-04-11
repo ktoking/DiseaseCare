@@ -8,6 +8,7 @@ import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
 import com.fehead.diseaseCare.controller.vo.req.UserInsertReq;
 import com.fehead.diseaseCare.controller.vo.req.UserRoleInfoReq;
+import com.fehead.diseaseCare.controller.vo.resp.UserStorageDataResp;
 import com.fehead.diseaseCare.entities.User;
 import com.fehead.diseaseCare.entities.model.UserBaseInfo;
 import com.fehead.diseaseCare.entities.model.UserIdRoleInfo;
@@ -98,7 +99,7 @@ public class UserController extends BaseController{
 
 
     @ApiOperation(value = "用户登录")
-    @GetMapping("/login")
+    @PostMapping("/login")
     @PassToken
     public CommonReturnType login(@RequestBody @Valid UserAuthReq userAuth) throws BusinessException {
         if(StringUtils.isEmpty(userAuth.getPhone())||StringUtils.isEmpty(userAuth.getPassword())){
@@ -111,8 +112,12 @@ public class UserController extends BaseController{
         if(findUser==null){
             throw new BusinessException(EmBusinessError.USER_AUTH_ERROR);
         }
+
         String token = JwtUtil.makeToken(findUser);
-        return CommonReturnType.creat(token);
+        UserStorageDataResp userStorageDataResp=new UserStorageDataResp();
+        BeanUtils.copyProperties(findUser,userStorageDataResp);
+        userStorageDataResp.setToken(token);
+        return CommonReturnType.creat(userStorageDataResp);
     }
 
     @ApiOperation(value = "用户注册")
