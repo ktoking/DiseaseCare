@@ -7,9 +7,11 @@ import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.MedicineInfoMapper;
 import com.fehead.diseaseCare.service.IMedicineInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +47,15 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
             medicineInfoList= medicineInfoMapper.selectList(queryWrapper);
         }catch (Exception e){
             throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR);
+        }
+        return medicineInfoList;
+    }
+
+    @Override
+    public List<MedicineInfo> getAllMedicine() {
+        List<MedicineInfo> medicineInfoList = medicineInfoMapper.selectList(new QueryWrapper<>());
+        for (MedicineInfo medicineInfo : medicineInfoList) {
+            medicineInfo.setMedicineInfo(medicineInfo.getMedicineInfo().substring(0,10)+"...");
         }
         return medicineInfoList;
     }

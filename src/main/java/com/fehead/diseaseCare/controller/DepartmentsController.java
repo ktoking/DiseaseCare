@@ -1,6 +1,7 @@
 package com.fehead.diseaseCare.controller;
 
 
+import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.entities.Departments;
 import com.fehead.diseaseCare.response.CommonReturnType;
@@ -9,11 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * <p>
@@ -38,5 +39,23 @@ public class DepartmentsController extends BaseController{
         Departments insertDepartment = departmentsService.insertDepartment(departments);
         return CommonReturnType.creat(insertDepartment);
     }
+
+    @ApiOperation(value = "所有科室信息")
+    @GetMapping("/getAllDepartment")
+    @UserLoginToken
+    public CommonReturnType getAllDepartment() {
+        List<Departments> list = departmentsService.getAllDepartment();
+        return CommonReturnType.creat(list);
+    }
+
+    @ApiOperation(value = "删除科室信息")
+    @DeleteMapping("/deleteDepartmentById")
+//    @UserLoginToken
+    @PassToken
+    public CommonReturnType deleteDepartmentById(Integer departmentId) {
+        int delete = departmentsService.deleteDepartmentById(departmentId);
+        return CommonReturnType.creat(delete);
+    }
+
 }
 

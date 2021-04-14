@@ -19,7 +19,7 @@ public class JwtUtil {
     public static String makeToken(User user) {
         //withAudience()存入需要保存在token的信息，这里我把用户ID存入token中
         String token="";
-        Date date = new Date(System.currentTimeMillis()+1000*60*2*24);
+        Date date = new Date(System.currentTimeMillis()+1000*60*2*24 *30);
         token= JWT.create()
                 .withClaim("userId",user.getId())
                 .withClaim("role",user.getRole())

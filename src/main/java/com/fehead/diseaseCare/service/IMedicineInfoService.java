@@ -18,4 +18,6 @@ public interface IMedicineInfoService extends IService<MedicineInfo> {
     MedicineInfo insertDepartment(MedicineInfo medicineInfo);
 
     List<MedicineInfo> getMedicineByName(String medicineName);
+
+    List<MedicineInfo> getAllMedicine();
 }

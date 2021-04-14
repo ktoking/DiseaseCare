@@ -48,6 +48,13 @@ public class MedicineInfoController extends BaseController{
         return CommonReturnType.creat(medicineInfoList);
     }
 
+    @ApiOperation(value = "所有药品信息")
+    @GetMapping("/getAllMedicine")
+    @UserLoginToken
+    public CommonReturnType getAllMedicine() {
+        List<MedicineInfo> medicineInfoList=medicineInfoService.getAllMedicine();
+        return CommonReturnType.creat(medicineInfoList);
+    }
 
 }
 
