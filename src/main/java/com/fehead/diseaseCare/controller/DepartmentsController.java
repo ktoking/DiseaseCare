@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -49,12 +50,19 @@ public class DepartmentsController extends BaseController{
     }
 
     @ApiOperation(value = "删除科室信息")
-    @DeleteMapping("/deleteDepartmentById")
-//    @UserLoginToken
-    @PassToken
-    public CommonReturnType deleteDepartmentById(Integer departmentId) {
-        int delete = departmentsService.deleteDepartmentById(departmentId);
+    @PostMapping("/deleteDepartmentById")
+    @UserLoginToken
+    public CommonReturnType deleteDepartmentById(@RequestBody Map<String, Integer> requestMap) {
+        int delete = departmentsService.deleteDepartmentById(requestMap.get("departmentId"));
         return CommonReturnType.creat(delete);
+    }
+
+    @ApiOperation(value = "修改科室信息")
+    @PutMapping("/updateDepartment")
+    @UserLoginToken
+    public CommonReturnType updateDepartment(@RequestBody @Valid Departments departments) {
+        int update = departmentsService.updateDepartment(departments);
+        return CommonReturnType.creat(update);
     }
 
 }

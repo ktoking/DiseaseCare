@@ -21,4 +21,6 @@ public interface IDepartmentsService extends IService<Departments> {
     List<Departments> getAllDepartment();
 
     int deleteDepartmentById(Integer departmentId);
+
+    int updateDepartment(Departments departments);
 }

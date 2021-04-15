@@ -20,4 +20,6 @@ public interface IMedicineInfoService extends IService<MedicineInfo> {
     List<MedicineInfo> getMedicineByName(String medicineName);
 
     List<MedicineInfo> getAllMedicine();
+
+    int deleteMedicineById(Integer medicineId);
 }

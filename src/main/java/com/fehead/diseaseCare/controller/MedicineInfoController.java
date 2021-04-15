@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -54,6 +55,14 @@ public class MedicineInfoController extends BaseController{
     public CommonReturnType getAllMedicine() {
         List<MedicineInfo> medicineInfoList=medicineInfoService.getAllMedicine();
         return CommonReturnType.creat(medicineInfoList);
+    }
+
+    @ApiOperation(value = "删除药品信息")
+    @PostMapping("/deleteMedicineById")
+    @UserLoginToken
+    public CommonReturnType deleteMedicineById(@RequestBody Map<String, Integer> requestMap) {
+        int delete = medicineInfoService.deleteMedicineById(requestMap.get("medicineId"));
+        return CommonReturnType.creat(delete);
     }
 
 }

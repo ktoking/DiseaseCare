@@ -55,8 +55,21 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
     public List<MedicineInfo> getAllMedicine() {
         List<MedicineInfo> medicineInfoList = medicineInfoMapper.selectList(new QueryWrapper<>());
         for (MedicineInfo medicineInfo : medicineInfoList) {
-            medicineInfo.setMedicineInfo(medicineInfo.getMedicineInfo().substring(0,10)+"...");
+            if(medicineInfo.getMedicineInfo().length()>=10){
+                medicineInfo.setMedicineInfo(medicineInfo.getMedicineInfo().substring(0,10)+"...");
+            }
         }
         return medicineInfoList;
+    }
+
+    @Override
+    public int deleteMedicineById(Integer medicineId) {
+        int delete=-1;
+        try {
+            delete=medicineInfoMapper.deleteById(medicineId);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_DELETE_ERROR,e.getMessage());
+        }
+        return delete;
     }
 }

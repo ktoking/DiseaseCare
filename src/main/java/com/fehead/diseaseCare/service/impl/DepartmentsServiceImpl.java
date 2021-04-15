@@ -52,4 +52,15 @@ public class DepartmentsServiceImpl extends ServiceImpl<DepartmentsMapper, Depar
         }
         return delete;
     }
+
+    @Override
+    public int updateDepartment(Departments departments) {
+        int update=-1;
+        try {
+            update = departmentsMapper.updateById(departments);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_UPDATE_ERROR,e.getMessage());
+        }
+        return update;
+    }
 }
