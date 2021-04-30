@@ -55,7 +55,7 @@ public class BaseController {
             responseData.put("errorMsg",b.toString());
         } else {
             responseData.put("errorCode", EmBusinessError.UNKNOWN_ERROR.getErrorCode());
-            responseData.put("errorMsg", EmBusinessError.UNKNOWN_ERROR.getErrorMsg());
+            responseData.put("errorMsg", ex.getMessage());
         }
 
         return CommonReturnType.creat(responseData,"fail");

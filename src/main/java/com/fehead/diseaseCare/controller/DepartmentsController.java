@@ -3,6 +3,7 @@ package com.fehead.diseaseCare.controller;
 
 import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
+import com.fehead.diseaseCare.controller.vo.resp.DepartmentSelector;
 import com.fehead.diseaseCare.entities.Departments;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IDepartmentsService;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -63,6 +65,28 @@ public class DepartmentsController extends BaseController{
     public CommonReturnType updateDepartment(@RequestBody @Valid Departments departments) {
         int update = departmentsService.updateDepartment(departments);
         return CommonReturnType.creat(update);
+    }
+
+    @ApiOperation(value = "模糊查询科室信息")
+    @GetMapping("/getDepartmentByNameFuzzy")
+    @UserLoginToken
+    public CommonReturnType getDepartmentByNameFuzzy(@RequestParam("type") String type) {
+        List<Departments> departmentByNameFuzzy = departmentsService.getDepartmentByNameFuzzy(type);
+        return CommonReturnType.creat(departmentByNameFuzzy);
+    }
+
+    @ApiOperation(value = "所有课室信息选择器")
+    @GetMapping("/getAllDepartmentSelector")
+    @UserLoginToken
+    public CommonReturnType getAllDepartmentSelector() {
+        List<Departments> list = departmentsService.getAllDepartment();
+        List<DepartmentSelector> collect = list.stream().map(e -> {
+            DepartmentSelector departmentSelector = new DepartmentSelector();
+            departmentSelector.setValue(e.getId());
+            departmentSelector.setText(e.getName());
+            return departmentSelector;
+        }).collect(Collectors.toList());
+        return CommonReturnType.creat(collect);
     }
 
 }

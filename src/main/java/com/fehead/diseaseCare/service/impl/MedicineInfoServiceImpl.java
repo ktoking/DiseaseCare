@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -44,7 +45,7 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
         queryWrapper.likeRight("medicine_name",medicineName);
         List<MedicineInfo> medicineInfoList =null;
         try {
-            medicineInfoList= medicineInfoMapper.selectList(queryWrapper);
+            medicineInfoList= medicineInfoMapper.selectList(queryWrapper).stream().map(e->{ e.setMedicineInfo(e.getMedicineInfo().substring(0,15)); return e;}).collect(Collectors.toList());
         }catch (Exception e){
             throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR);
         }

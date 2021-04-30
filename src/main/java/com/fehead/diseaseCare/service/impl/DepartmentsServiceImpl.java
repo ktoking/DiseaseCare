@@ -2,6 +2,7 @@ package com.fehead.diseaseCare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fehead.diseaseCare.entities.Departments;
+import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.DepartmentsMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -62,5 +64,18 @@ public class DepartmentsServiceImpl extends ServiceImpl<DepartmentsMapper, Depar
             throw new BusinessException(EmBusinessError.DATA_UPDATE_ERROR,e.getMessage());
         }
         return update;
+    }
+
+    @Override
+    public List<Departments> getDepartmentByNameFuzzy(String type) {
+        QueryWrapper<Departments>  queryWrapper=new QueryWrapper<>();
+        queryWrapper.likeRight("type",type);
+        List<Departments> departmentsList =null;
+        try {
+            departmentsList= departmentsMapper.selectList(queryWrapper);
+        }catch (Exception e){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR);
+        }
+        return departmentsList;
     }
 }

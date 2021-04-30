@@ -42,9 +42,9 @@ public class MedicineInfoController extends BaseController{
     }
 
     @ApiOperation(value = "根据药名模糊查找药品")
-    @GetMapping("/getMedicineByName/{medicineName}")
+    @GetMapping("/getMedicineByNameFuzzy")
     @UserLoginToken
-    public CommonReturnType getMedicineByName(@PathVariable("medicineName") @NotNull(message = "药品名不能为空") String medicineName) {
+    public CommonReturnType getMedicineByName(@RequestParam("medicineName") @NotNull(message = "药品名不能为空") String medicineName) {
         List<MedicineInfo> medicineInfoList=medicineInfoService.getMedicineByName(medicineName);
         return CommonReturnType.creat(medicineInfoList);
     }

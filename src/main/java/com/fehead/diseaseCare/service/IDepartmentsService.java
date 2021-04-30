@@ -23,4 +23,6 @@ public interface IDepartmentsService extends IService<Departments> {
     int deleteDepartmentById(Integer departmentId);
 
     int updateDepartment(Departments departments);
+
+    List<Departments> getDepartmentByNameFuzzy(String type);
 }
