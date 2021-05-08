@@ -3,3 +3,6 @@ spring:
     active: prod
 server:
   port: 8666
+
+tcp:
+  port: 17781

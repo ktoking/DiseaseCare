@@ -16,4 +16,6 @@ import java.util.List;
 public interface IPatientHealthService extends IService<PatientHealth> {
 
     List<PatientHealth> getPatientCollectData(Integer patientId);
+
+    Integer insertPatientHealth(String str);
 }

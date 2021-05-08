@@ -38,4 +38,27 @@ public class PatientHealthServiceImpl extends ServiceImpl<PatientHealthMapper, P
         }
         return patientHealths;
     }
+
+    @Override
+    public Integer insertPatientHealth(String str) {
+
+        if(str.startsWith("AA")&&str.endsWith("\n")){
+            str=str.substring(3,str.length()-1);
+            String[] s = str.split("_");
+            if(s.length!=6){ // 当没拿到所有数据后返回-1
+                return -1;
+            }else {
+                PatientHealth patientHealth=new PatientHealth();
+                patientHealth.setLongitude(s[0]);
+                patientHealth.setLatitude(s[1]);
+                patientHealth.setTemperature(s[2]);
+                patientHealth.setBloodOxygen(s[3]);
+                patientHealth.setHeartRate(s[4]);
+                patientHealth.setPatientId(Integer.parseInt(s[5]));
+                return patientHealthMapper.insert(patientHealth);
+            }
+        }else {
+            return -1;
+        }
+    }
 }

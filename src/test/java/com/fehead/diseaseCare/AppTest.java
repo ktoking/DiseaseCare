@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fehead.diseaseCare.entities.OrderInfo;
 import com.fehead.diseaseCare.entities.User;
 import com.fehead.diseaseCare.mapper.OrderInfoMapper;
+import com.fehead.diseaseCare.service.IPatientHealthService;
 import com.fehead.diseaseCare.service.IUserService;
 import com.fehead.diseaseCare.utility.RedisUtil;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.sql.SQLOutput;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -38,6 +40,9 @@ public class AppTest
     @Autowired
     private OrderInfoMapper orderInfoMapper;
 
+    @Autowired
+    private IPatientHealthService patientHealthService;
+
     @Test
     public void insertUserTest(){
         User user=new User();
@@ -60,6 +65,12 @@ public class AppTest
         queryWrapper.eq("id",1);
         OrderInfo orderInfo = orderInfoMapper.selectOne(queryWrapper);
         System.out.println(orderInfo);
+    }
+
+    @Test
+    public  void testInsert(){
+        Integer integer = patientHealthService.insertPatientHealth("AA_12.233_23.2323_26.8_24_77_1\n");
+        System.out.println(integer);
     }
 
 }
