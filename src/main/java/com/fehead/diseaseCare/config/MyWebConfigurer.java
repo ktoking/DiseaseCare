@@ -1,24 +1,16 @@
 package com.fehead.diseaseCare.config;
 
-import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootConfiguration
+@Configuration
 public class MyWebConfigurer implements WebMvcConfigurer {
 
+    static final String ORIGINS[] = new String[] { "GET", "POST", "PUT", "DELETE" };
     @Override
-    public void addCorsMappings(CorsRegistry corsRegistry){
-        /**
-         * 所有请求都允许跨域，使用这种配置就不需要
-         * 在interceptor中配置header了
-         */
-        corsRegistry.addMapping("/**")
-                .allowCredentials(true)
-                .allowedOrigins("http://localhost:8082")
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-                .allowedHeaders("*")
-                .maxAge(3600);
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods(ORIGINS).maxAge(3600);
     }
 
 }
