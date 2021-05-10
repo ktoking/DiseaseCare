@@ -18,4 +18,6 @@ public class UserStorageDataResp {
     private String phone;
 
     private String token;
+
+    private Integer role;
 }

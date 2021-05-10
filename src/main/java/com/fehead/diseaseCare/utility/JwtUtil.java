@@ -23,7 +23,6 @@ public class JwtUtil {
         token= JWT.create()
                 .withClaim("userId",user.getId())
                 .withClaim("role",user.getRole())
-                .withExpiresAt(date)
                 .sign(Algorithm.HMAC256("xxxxx4234{}d]]fxxxxdsadasdasdsad"));
         return token;
     }
