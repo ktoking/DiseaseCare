@@ -19,6 +19,9 @@
     <property name="log.level" value="debug"/>
     <property name="log.maxSize" value="5MB" />
 
+    <appender name="grpc-log" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender"></appender>
+
+
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -119,6 +122,7 @@
     <!-- root级别   DEBUG -->
     <root>
         <!-- 控制台输出 -->
+        <appender-ref ref="grpc-log" />
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="INFO" />
         <appender-ref ref="ERROR" />
