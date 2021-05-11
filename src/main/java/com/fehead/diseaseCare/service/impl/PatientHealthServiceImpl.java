@@ -1,15 +1,16 @@
 package com.fehead.diseaseCare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fehead.diseaseCare.entities.PatientHealth;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.PatientHealthMapper;
 import com.fehead.diseaseCare.service.IPatientHealthService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -55,6 +56,7 @@ public class PatientHealthServiceImpl extends ServiceImpl<PatientHealthMapper, P
                 patientHealth.setBloodOxygen(s[3]);
                 patientHealth.setHeartRate(s[4]);
                 patientHealth.setPatientId(Integer.parseInt(s[5]));
+                patientHealth.setCreateDate(LocalDateTime.now());
                 return patientHealthMapper.insert(patientHealth);
             }
         }else {

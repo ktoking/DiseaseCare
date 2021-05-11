@@ -22,7 +22,7 @@
     <appender name="grpc-log" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
-                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level logger_name:%logger{36} - [%tid] - message:%msg%n</pattern>
+                <pattern>%d{HH:mm:ss.SSS,CTT} [%thread] %-5level logger_name:%logger{36} - [%tid] - message:%msg%n</pattern>
             </layout>
         </encoder>
     </appender>
@@ -35,7 +35,7 @@
             <pattern>
                 <!-- 设置日志输出格式 -->
                 <!-- 日期 [线程] [class类]-[日志级别] log内容 -->
-                %blue(%d{yyyy-MM-dd HH:mm:ss,SSS}) [%cyan(%t)] [%yellow(%c)]-[%highlight(%p)] %m%n
+                %blue(%d{yyyy-MM-dd HH:mm:ss.SSS,CTT}) [%cyan(%t)] [%yellow(%c)]-[%highlight(%p)] %m%n
             </pattern>
         </encoder>
     </appender>
@@ -68,7 +68,7 @@
         <encoder>
             <pattern>
                 <!-- 设置日志输出格式 -->
-                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss.SSS,CTT} [%thread] %-5level %logger{50} - %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -86,7 +86,7 @@
             <MaxFileSize>${log.maxSize}</MaxFileSize>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,CTT} [%-5level] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -104,7 +104,7 @@
             <MaxFileSize>${log.maxSize}</MaxFileSize>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,CTT} [%-5level] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -116,7 +116,7 @@
             <MaxFileSize>${log.maxSize}</MaxFileSize>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,CTT} [%-5level] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
