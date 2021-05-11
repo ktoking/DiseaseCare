@@ -10,4 +10,5 @@ public class DoctorResp {
     private String avatar;
     private String phone;
     private Integer sex;
+    private String info;
 }

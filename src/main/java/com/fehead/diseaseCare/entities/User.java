@@ -88,4 +88,7 @@ public class User implements Serializable {
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
+    @ApiModelProperty(value = "简介信息")
+    private String info;
+
 }
