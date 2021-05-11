@@ -42,8 +42,8 @@ public class PatientHealthServiceImpl extends ServiceImpl<PatientHealthMapper, P
     @Override
     public Integer insertPatientHealth(String str) {
 
-        if(str.startsWith("AA")&&str.endsWith("\n")){
-            str=str.substring(3,str.length()-1);
+        if(str.startsWith("AA")){
+            str=str.substring(3,str.length()-2);
             String[] s = str.split("_");
             if(s.length!=6){ // 当没拿到所有数据后返回-1
                 return -1;
