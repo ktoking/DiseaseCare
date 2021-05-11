@@ -1,7 +1,9 @@
 package com.fehead.diseaseCare.service;
 
-import com.fehead.diseaseCare.entities.Departments;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fehead.diseaseCare.controller.vo.resp.departmentResp.DepartmentTypeWithNameResp;
+import com.fehead.diseaseCare.controller.vo.resp.departmentResp.DepartmentWithDoctorResp;
+import com.fehead.diseaseCare.entities.Departments;
 
 import java.util.List;
 
@@ -25,4 +27,9 @@ public interface IDepartmentsService extends IService<Departments> {
     int updateDepartment(Departments departments);
 
     List<Departments> getDepartmentByNameFuzzy(String type);
+
+    List<DepartmentWithDoctorResp> getDoctorWithDepartment();
+
+    List<DepartmentTypeWithNameResp> getDepartmentWithType();
+
 }

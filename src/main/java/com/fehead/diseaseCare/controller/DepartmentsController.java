@@ -1,9 +1,10 @@
 package com.fehead.diseaseCare.controller;
 
 
-import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.controller.vo.resp.DepartmentSelector;
+import com.fehead.diseaseCare.controller.vo.resp.departmentResp.DepartmentTypeWithNameResp;
+import com.fehead.diseaseCare.controller.vo.resp.departmentResp.DepartmentWithDoctorResp;
 import com.fehead.diseaseCare.entities.Departments;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IDepartmentsService;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -87,6 +87,22 @@ public class DepartmentsController extends BaseController{
             return departmentSelector;
         }).collect(Collectors.toList());
         return CommonReturnType.creat(collect);
+    }
+
+    @ApiOperation(value = "获取所有科室下相关医生")
+    @GetMapping("/getDoctorWithDepartment")
+    @UserLoginToken
+    public CommonReturnType getDoctorWithDepartment() {
+        List<DepartmentWithDoctorResp> list=departmentsService.getDoctorWithDepartment();
+        return CommonReturnType.creat(list);
+    }
+
+    @ApiOperation(value = "获取不同type下的科室信息")
+    @GetMapping("/getDepartmentWithType")
+    @UserLoginToken
+    public CommonReturnType getDepartmentWithType() {
+        List<DepartmentTypeWithNameResp> list=departmentsService.getDepartmentWithType();
+        return CommonReturnType.creat(list);
     }
 
 }
