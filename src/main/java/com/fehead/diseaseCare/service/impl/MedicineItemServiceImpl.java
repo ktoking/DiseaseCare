@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class MedicineItemServiceImpl extends ServiceImpl<MedicineItemMapper, Med
             medicineItem.setCount(itemReq.getCount());
             medicineItem.setMedicineId(itemReq.getMedicineId());
             medicineItem.setHistoryId(historyId);
+            medicineItem.setCreateTime(LocalDateTime.now());
 
             MedicineInfo medicineInfo = medicineInfoMapper.selectOne(new QueryWrapper<MedicineInfo>().lambda().eq(MedicineInfo::getId, itemReq.getMedicineId()));
             if(medicineInfo!=null){
