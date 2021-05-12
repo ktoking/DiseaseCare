@@ -19,4 +19,6 @@ public interface IPatientHistoryService extends IService<PatientHistory> {
     List<PatientHistoryResp> getHistoryByPatientId(Integer patientId);
 
     List<PatientHistoryResp> getHistoryByDoctorId(Integer doctorId);
+
+    int insertHitoryByDoctor(Integer patientId, String patientSymptoms,Integer doctorId);
 }

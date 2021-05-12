@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,17 @@ public class PatientHistoryServiceImpl extends ServiceImpl<PatientHistoryMapper,
     @Override
     public List<PatientHistoryResp> getHistoryByDoctorId(Integer doctorId) {
         return getHistoryByUserId(doctorId,1);
+    }
+
+    @Override
+    public int insertHitoryByDoctor(Integer patientId, String patientSymptoms,Integer doctorId) {
+        PatientHistory patientHistory=new PatientHistory();
+        patientHistory.setCreateTime(LocalDateTime.now());
+        patientHistory.setPatientId(patientId);
+        patientHistory.setPatientSymptoms(patientSymptoms);
+        patientHistory.setDoctorId(doctorId);
+        int insert = patientHistoryMapper.insert(patientHistory);
+        return insert;
     }
 
     public List<PatientHistoryResp> getHistoryByUserId(Integer userId,int status){

@@ -2,16 +2,17 @@ package com.fehead.diseaseCare.controller;
 
 
 import com.fehead.diseaseCare.aop.UserLoginToken;
+import com.fehead.diseaseCare.controller.vo.req.PatientHistoryReq;
 import com.fehead.diseaseCare.controller.vo.resp.patientHistoryResp.PatientHistoryResp;
+import com.fehead.diseaseCare.entities.model.UserIdRoleInfo;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IPatientHistoryService;
+import com.fehead.diseaseCare.utility.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,6 +46,15 @@ public class PatientHistoryController {
     public CommonReturnType getHistoryByPatientId(@RequestParam Integer doctorId) {
         List<PatientHistoryResp> historyByUserId = patientHistoryService.getHistoryByDoctorId(doctorId);
         return CommonReturnType.creat(historyByUserId);
+    }
+
+    @ApiOperation(value = "医生创建患者看病记录")
+    @PostMapping("/insertHitoryByDoctor")
+    @UserLoginToken
+    public CommonReturnType insertHitoryByDoctor(@RequestBody @Validated PatientHistoryReq patientHistoryReq) {
+        UserIdRoleInfo userIdByToken = JwtUtil.getUserIdByToken();
+        int insert = patientHistoryService.insertHitoryByDoctor(patientHistoryReq.getPatientId(),patientHistoryReq.getPatientSymptoms(),userIdByToken.getUserId());
+        return CommonReturnType.creat(insert);
     }
 
 }
