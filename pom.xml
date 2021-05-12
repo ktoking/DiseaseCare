@@ -23,7 +23,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <skywalking.version>8.5.0</skywalking.version>
   </properties>
+
 
   <dependencies>
 
@@ -155,6 +157,16 @@
           <artifactId>apm-toolkit-logback-1.x</artifactId>
           <version>8.5.0</version>
       </dependency>
+      <dependency>
+          <groupId>org.apache.skywalking</groupId>
+          <artifactId>apm-toolkit-trace</artifactId>
+          <version>${skywalking.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.skywalking</groupId>
+          <artifactId>apm-toolkit-logback-1.x</artifactId>
+          <version>${skywalking.version}</version>
+      </dependency>
 
     <!-- 文件上传组件 -->
     <dependency>
@@ -189,7 +201,7 @@
       <artifactId>fastjson</artifactId>
       <version>1.1.31</version>
     </dependency>
-
+    <!--netty包-->
      <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-all</artifactId>
