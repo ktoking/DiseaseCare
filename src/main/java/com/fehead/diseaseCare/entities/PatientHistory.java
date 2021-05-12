@@ -1,15 +1,16 @@
 package com.fehead.diseaseCare.entities;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -42,11 +43,11 @@ public class PatientHistory implements Serializable {
     @ApiModelProperty(value = "创建日期")
     private LocalDateTime createTime;
 
-    @ApiModelProperty(value = "药品清单id 默认-1不开药")
-    private Integer medicineItemId;
-
     @ApiModelProperty(value = "此次总价")
     private BigDecimal price;
+
+    @ApiModelProperty(value = "0代表未支付 1代表已支付 2代表已经取药")
+    private Integer status;
 
 
 }

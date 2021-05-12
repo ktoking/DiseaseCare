@@ -1,7 +1,11 @@
 package com.fehead.diseaseCare.service;
 
-import com.fehead.diseaseCare.entities.MedicineItem;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fehead.diseaseCare.controller.vo.req.MedicineItemReq;
+import com.fehead.diseaseCare.controller.vo.resp.medicineItemResp.MedicineItemWithInfo;
+import com.fehead.diseaseCare.entities.MedicineItem;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMedicineItemService extends IService<MedicineItem> {
 
+    List<MedicineItemWithInfo> getMedicineItemByItemId(Integer historyId);
+
+    int makeMedicineItemForPatient(List<MedicineItemReq> medicineItemReq, Integer historyId);
 }

@@ -1,7 +1,10 @@
 package com.fehead.diseaseCare.service;
 
-import com.fehead.diseaseCare.entities.PatientHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fehead.diseaseCare.controller.vo.resp.patientHistoryResp.PatientHistoryResp;
+import com.fehead.diseaseCare.entities.PatientHistory;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPatientHistoryService extends IService<PatientHistory> {
 
+    List<PatientHistoryResp> getHistoryByPatientId(Integer patientId);
+
+    List<PatientHistoryResp> getHistoryByDoctorId(Integer doctorId);
 }

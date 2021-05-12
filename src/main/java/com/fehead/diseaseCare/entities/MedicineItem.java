@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -29,17 +30,17 @@ public class MedicineItem implements Serializable {
       @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "唯一标识清单")
-    private Integer itemId;
+    @ApiModelProperty(value = "关联patient_history.id")
+    private Integer historyId;
 
     @ApiModelProperty(value = "药品id")
-    private String medicineId;
+    private Integer medicineId;
 
     @ApiModelProperty(value = "药品数量")
     private Integer count;
 
     @ApiModelProperty(value = "创建时间")
-    private Long createTime;
+    private LocalDateTime createTime;
 
 
 }

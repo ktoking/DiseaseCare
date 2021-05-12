@@ -1,14 +1,24 @@
 package com.fehead.diseaseCare.utility;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
 
+    static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String localdateTimeToFormatString(LocalDateTime localDateTime){
+        String localTime = df.format(localDateTime);
+        return localTime;
+    }
+
+    public static LocalDateTime stringTolocaldateTime(String time){
+        LocalDateTime ldt = LocalDateTime.parse(time,df);
+        return ldt;
+    }
 
     public static LocalDateTime getTodayStart(LocalDateTime time){
         LocalDateTime todayStart = LocalDateTime.of(time.toLocalDate(), LocalTime.MIN);// 当天开始
