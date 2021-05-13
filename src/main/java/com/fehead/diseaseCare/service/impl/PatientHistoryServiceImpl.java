@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fehead.diseaseCare.controller.vo.resp.patientHistoryResp.PatientHistoryResp;
 import com.fehead.diseaseCare.entities.PatientHistory;
 import com.fehead.diseaseCare.entities.User;
+import com.fehead.diseaseCare.error.BusinessException;
+import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.PatientHistoryMapper;
 import com.fehead.diseaseCare.service.IPatientHistoryService;
 import com.fehead.diseaseCare.service.IUserService;
 import com.fehead.diseaseCare.utility.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -53,6 +56,37 @@ public class PatientHistoryServiceImpl extends ServiceImpl<PatientHistoryMapper,
         patientHistory.setDoctorId(doctorId);
         int insert = patientHistoryMapper.insert(patientHistory);
         return patientHistory.getId();
+    }
+
+    @Override
+    @Transactional
+    public Integer payMoney(Integer historyId, Integer userId) {
+
+        PatientHistory patientHistory = patientHistoryMapper.selectById(historyId);
+        if(patientHistory==null){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR,"patientHistory is empty");
+        }
+        if(patientHistory.getStatus()!=0){
+            throw new BusinessException(EmBusinessError.COMMON_ERROR,"订单无需支付");
+        }
+        User user=userService.queruUserByUserId(userId);
+        if(user==null){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR,"user is empty");
+        }
+        if(patientHistory.getPrice().compareTo(user.getPrice())==1){ // 如果订单支付金额大于用户余额
+            throw new BusinessException(EmBusinessError.COMMON_ERROR,"用户余额不足");
+        }else {
+            User updateUser=new User();
+            updateUser.setId(user.getId());
+            updateUser.setPrice(user.getPrice().subtract(patientHistory.getPrice()));
+            int updateU=userService.updateByUserId(updateUser);
+
+            PatientHistory updateHistory= new PatientHistory();
+            updateHistory.setId(patientHistory.getId());
+            updateHistory.setStatus(1);
+            int updateH = patientHistoryMapper.updateById(updateHistory);
+            return updateHistory.getStatus();
+        }
     }
 
     public List<PatientHistoryResp> getHistoryByUserId(Integer userId,int status){

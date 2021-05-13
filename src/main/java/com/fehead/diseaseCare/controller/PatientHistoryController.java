@@ -57,5 +57,14 @@ public class PatientHistoryController {
         return CommonReturnType.creat(insert);
     }
 
+    @ApiOperation(value = "病人支付订单药费")
+    @PutMapping("/payMoney")
+    @UserLoginToken
+    public CommonReturnType payMoney(@RequestParam Integer historyId) {
+        UserIdRoleInfo userIdByToken = JwtUtil.getUserIdByToken();
+        Integer historyStatus=patientHistoryService.payMoney(historyId,userIdByToken.getUserId());
+        return CommonReturnType.creat(historyStatus);
+    }
+
 }
 

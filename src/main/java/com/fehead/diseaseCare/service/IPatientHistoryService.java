@@ -21,4 +21,6 @@ public interface IPatientHistoryService extends IService<PatientHistory> {
     List<PatientHistoryResp> getHistoryByDoctorId(Integer doctorId);
 
     int insertHitoryByDoctor(Integer patientId, String patientSymptoms,Integer doctorId);
+
+    Integer payMoney(Integer historyId, Integer userId);
 }

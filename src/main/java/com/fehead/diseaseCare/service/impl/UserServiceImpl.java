@@ -14,9 +14,9 @@ import com.fehead.diseaseCare.mapper.DepartmentsMapper;
 import com.fehead.diseaseCare.mapper.UserMapper;
 import com.fehead.diseaseCare.service.IUserService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,10 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
-    @Autowired
+    @Resource
     private DepartmentsMapper departmentsMapper;
 
 
@@ -122,5 +122,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             resultList.add(userBaseInfo);
         }
         return resultList;
+    }
+
+    @Override
+    public User queruUserByUserId(Integer userId) {
+        return userMapper.selectById(userId);
+    }
+
+    @Override
+    public int updateByUserId(User user) {
+        return userMapper.updateById(user);
     }
 }

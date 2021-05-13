@@ -29,4 +29,8 @@ public interface IUserService extends IService<User> {
     List<UserBaseInfo> queryAllDoctor();
 
     List<UserBaseInfo> getAllPatientByDoctorId(int doctorId);
+
+    User queruUserByUserId(Integer userId);
+
+    int updateByUserId(User user);
 }
