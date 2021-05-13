@@ -7,9 +7,9 @@ import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.PatientHealthMapper;
 import com.fehead.diseaseCare.service.IPatientHealthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class PatientHealthServiceImpl extends ServiceImpl<PatientHealthMapper, PatientHealth> implements IPatientHealthService {
 
-    @Autowired
+    @Resource
     private PatientHealthMapper patientHealthMapper;
 
     @Override
@@ -42,7 +42,7 @@ public class PatientHealthServiceImpl extends ServiceImpl<PatientHealthMapper, P
 
     @Override
     public Integer insertPatientHealth(String str) {
-
+        str=str.trim();
         if(str.startsWith("AA")){
             str=str.substring(3,str.length()-2);
             String[] s = str.split("_");
