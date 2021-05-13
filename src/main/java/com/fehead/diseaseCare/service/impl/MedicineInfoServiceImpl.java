@@ -1,19 +1,18 @@
 package com.fehead.diseaseCare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.mapper.MedicineInfoMapper;
 import com.fehead.diseaseCare.service.IMedicineInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -26,7 +25,9 @@ import java.util.stream.Collectors;
 @Service
 public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, MedicineInfo> implements IMedicineInfoService {
 
-    @Autowired
+    public static final int PAGE_SIZE=10;
+
+    @Resource
     private MedicineInfoMapper medicineInfoMapper;
 
     @Override
@@ -45,7 +46,7 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
         queryWrapper.likeRight("medicine_name",medicineName);
         List<MedicineInfo> medicineInfoList =null;
         try {
-            medicineInfoList= medicineInfoMapper.selectList(queryWrapper).stream().map(e->{ e.setMedicineInfo(e.getMedicineInfo().substring(0,15)); return e;}).collect(Collectors.toList());
+            medicineInfoList= medicineInfoMapper.selectList(queryWrapper);
         }catch (Exception e){
             throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR);
         }
@@ -53,14 +54,10 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
     }
 
     @Override
-    public List<MedicineInfo> getAllMedicine() {
-        List<MedicineInfo> medicineInfoList = medicineInfoMapper.selectList(new QueryWrapper<>());
-        for (MedicineInfo medicineInfo : medicineInfoList) {
-            if(medicineInfo.getMedicineInfo().length()>=10){
-                medicineInfo.setMedicineInfo(medicineInfo.getMedicineInfo().substring(0,10)+"...");
-            }
-        }
-        return medicineInfoList;
+    public List<MedicineInfo> getAllMedicine(Integer page) {
+        Page<MedicineInfo> medicineInfoPage = new Page<>(page,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
+        IPage<MedicineInfo> listPage = medicineInfoMapper.selectPage(medicineInfoPage, new QueryWrapper<MedicineInfo>());
+        return listPage.getRecords();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.fehead.diseaseCare.controller;
 
 
-import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.fehead.diseaseCare.response.CommonReturnType;
@@ -52,8 +51,8 @@ public class MedicineInfoController extends BaseController{
     @ApiOperation(value = "所有药品信息")
     @GetMapping("/getAllMedicine")
     @UserLoginToken
-    public CommonReturnType getAllMedicine() {
-        List<MedicineInfo> medicineInfoList=medicineInfoService.getAllMedicine();
+    public CommonReturnType getAllMedicine(@RequestParam(required = false,defaultValue = "1") Integer page) {
+        List<MedicineInfo> medicineInfoList=medicineInfoService.getAllMedicine(page);
         return CommonReturnType.creat(medicineInfoList);
     }
 

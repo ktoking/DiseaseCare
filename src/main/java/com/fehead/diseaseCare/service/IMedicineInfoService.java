@@ -19,7 +19,7 @@ public interface IMedicineInfoService extends IService<MedicineInfo> {
 
     List<MedicineInfo> getMedicineByName(String medicineName);
 
-    List<MedicineInfo> getAllMedicine();
+    List<MedicineInfo> getAllMedicine(Integer page);
 
     int deleteMedicineById(Integer medicineId);
 }
