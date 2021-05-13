@@ -30,7 +30,7 @@ public class PatientHealthServiceImpl extends ServiceImpl<PatientHealthMapper, P
     @Override
     public List<PatientHealth> getPatientCollectData(Integer patientId) {
         QueryWrapper<PatientHealth> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("patient_id",patientId).orderByAsc("create_date");
+        queryWrapper.eq("patient_id",patientId).orderByDesc("create_date");
         List<PatientHealth> patientHealths=null;
         try {
             patientHealths = patientHealthMapper.selectList(queryWrapper);
