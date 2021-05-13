@@ -1,8 +1,8 @@
 package com.fehead.diseaseCare.controller.vo.req;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,7 +26,7 @@ public class UserInsertReq {
 
     @ApiModelProperty(value = "生日")
     @NotNull(message = "生日不能为空")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime birthday;
 
     @ApiModelProperty(value = "邮箱")

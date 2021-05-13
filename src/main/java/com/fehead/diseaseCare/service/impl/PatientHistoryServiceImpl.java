@@ -52,7 +52,7 @@ public class PatientHistoryServiceImpl extends ServiceImpl<PatientHistoryMapper,
         patientHistory.setPatientSymptoms(patientSymptoms);
         patientHistory.setDoctorId(doctorId);
         int insert = patientHistoryMapper.insert(patientHistory);
-        return insert;
+        return patientHistory.getId();
     }
 
     public List<PatientHistoryResp> getHistoryByUserId(Integer userId,int status){
