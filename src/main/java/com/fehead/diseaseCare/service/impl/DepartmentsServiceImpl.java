@@ -143,4 +143,9 @@ public class DepartmentsServiceImpl extends ServiceImpl<DepartmentsMapper, Depar
         return rtVal;
 
     }
+
+    @Override
+    public Departments queryDepartmentById(Integer deptId) {
+        return departmentsMapper.selectById(deptId);
+    }
 }

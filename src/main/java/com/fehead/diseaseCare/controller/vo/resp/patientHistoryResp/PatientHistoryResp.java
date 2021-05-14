@@ -9,4 +9,6 @@ public class PatientHistoryResp extends PatientHistory {
     private String doctorName;
 
     private String createTimeFormat;
+
+    private String patientName;
 }

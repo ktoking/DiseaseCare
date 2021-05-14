@@ -1,5 +1,6 @@
 package com.fehead.diseaseCare.service;
 
+import com.fehead.diseaseCare.controller.vo.resp.orderInfoResp.OrderInfoDetail;
 import com.fehead.diseaseCare.entities.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,4 +22,6 @@ public interface IOrderInfoService extends IService<OrderInfo> {
     List<OrderInfo> getOrderPatient(Integer userId, LocalDateTime begainTime);
 
     OrderInfo updateOrderStatus(OrderInfo orderInfo);
+
+    List<OrderInfoDetail> getMyOrderInfo(Integer userId);
 }

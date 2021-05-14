@@ -32,4 +32,6 @@ public interface IDepartmentsService extends IService<Departments> {
 
     List<DepartmentTypeWithNameResp> getDepartmentWithType();
 
+    Departments queryDepartmentById(Integer deptId);
+
 }

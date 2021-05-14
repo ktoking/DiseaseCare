@@ -7,10 +7,14 @@ import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.controller.vo.req.OrderInfoReq;
 import com.fehead.diseaseCare.controller.vo.req.OrderUpdateReq;
 import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
+import com.fehead.diseaseCare.controller.vo.resp.orderInfoResp.OrderInfoDetail;
+import com.fehead.diseaseCare.controller.vo.resp.orderInfoResp.OrderInfoPatient;
 import com.fehead.diseaseCare.entities.OrderInfo;
+import com.fehead.diseaseCare.entities.User;
 import com.fehead.diseaseCare.entities.model.UserIdRoleInfo;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IOrderInfoService;
+import com.fehead.diseaseCare.service.IUserService;
 import com.fehead.diseaseCare.utility.DateUtil;
 import com.fehead.diseaseCare.utility.JwtUtil;
 import io.swagger.annotations.Api;
@@ -24,11 +28,13 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +52,9 @@ public class OrderInfoController extends BaseController{
 
     @Autowired
     private IOrderInfoService orderInfoService;
+
+    @Resource
+    private IUserService userService;
 
     @ApiOperation(value = "预约挂号")
     @PostMapping("/makeAppointment")
@@ -77,7 +86,18 @@ public class OrderInfoController extends BaseController{
         LocalDateTime today_start = DateUtil.getTodayStart(parse);
         UserIdRoleInfo userIdByToken = JwtUtil.getUserIdByToken();
         List<OrderInfo> orderInfoList = orderInfoService.getOrderPatient(userIdByToken.getUserId(),today_start);
-        return CommonReturnType.creat(orderInfoList);
+        List<OrderInfoPatient> rtVal=new ArrayList<>();
+        for (OrderInfo orderInfo : orderInfoList) {
+            OrderInfoPatient orderInfoPatient=new OrderInfoPatient();
+            BeanUtils.copyProperties(orderInfo,orderInfoPatient);
+            User patientUser = userService.queryUserByUserInfo(new User().setId(orderInfo.getPatientId()));
+            orderInfoPatient.setPatientAge(patientUser.getAge());
+            orderInfoPatient.setPatientAvatar(patientUser.getAvatar());
+            orderInfoPatient.setPatientName(patientUser.getName());
+            orderInfoPatient.setPatientSex(patientUser.getSex());
+            rtVal.add(orderInfoPatient);
+        }
+        return CommonReturnType.creat(rtVal);
     }
 
     @ApiOperation(value = "修改挂号状态")
@@ -94,7 +114,13 @@ public class OrderInfoController extends BaseController{
         return CommonReturnType.creat(updateOrder);
     }
 
-
+    @ApiOperation(value = "查看我的挂号记录")
+    @GetMapping("/getMyOrderInfo")
+    public CommonReturnType getMyOrderInfo(){
+        UserIdRoleInfo userIdByToken = JwtUtil.getUserIdByToken();
+        List<OrderInfoDetail> orderInfo=orderInfoService.getMyOrderInfo(userIdByToken.getUserId());
+        return CommonReturnType.creat(orderInfo);
+    }
 
 
 

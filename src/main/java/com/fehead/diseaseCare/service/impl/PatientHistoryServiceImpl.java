@@ -103,6 +103,8 @@ public class PatientHistoryServiceImpl extends ServiceImpl<PatientHistoryMapper,
             rt.setCreateTimeFormat(DateUtil.localdateTimeToFormatString(patientHistory.getCreateTime()));
             User doctor = userService.queryUserByUserInfo(new User().setId(patientHistory.getDoctorId()));
             rt.setDoctorName(doctor.getName());
+            User patient= userService.queryUserByUserInfo(new User().setId(patientHistory.getPatientId()));
+            rt.setPatientName(patient.getName());
             list.add(rt);
         }
         return list;
