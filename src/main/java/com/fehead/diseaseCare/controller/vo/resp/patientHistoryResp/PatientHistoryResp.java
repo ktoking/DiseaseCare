@@ -11,4 +11,8 @@ public class PatientHistoryResp extends PatientHistory {
     private String createTimeFormat;
 
     private String patientName;
+
+    private Integer patientAge;
+
+    private String patientAvata;
 }

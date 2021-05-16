@@ -105,6 +105,8 @@ public class PatientHistoryServiceImpl extends ServiceImpl<PatientHistoryMapper,
             rt.setDoctorName(doctor.getName());
             User patient= userService.queryUserByUserInfo(new User().setId(patientHistory.getPatientId()));
             rt.setPatientName(patient.getName());
+            rt.setPatientAvata(patient.getAvatar());
+            rt.setPatientAge(patient.getAge());
             list.add(rt);
         }
         return list;
