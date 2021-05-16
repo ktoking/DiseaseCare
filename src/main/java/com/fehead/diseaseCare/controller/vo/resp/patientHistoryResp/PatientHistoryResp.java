@@ -15,4 +15,6 @@ public class PatientHistoryResp extends PatientHistory {
     private Integer patientAge;
 
     private String patientAvata;
+
+    private Integer patientSex;
 }
