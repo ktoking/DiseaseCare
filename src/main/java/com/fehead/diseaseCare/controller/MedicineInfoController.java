@@ -1,16 +1,21 @@
 package com.fehead.diseaseCare.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.entities.MedicineInfo;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IMedicineInfoService;
+import com.fehead.diseaseCare.utility.PictureUtil;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -29,13 +34,19 @@ import java.util.Map;
 @Api(tags = "内部药品相关")
 public class MedicineInfoController extends BaseController{
 
-    @Autowired
+    @Resource
     private IMedicineInfoService medicineInfoService;
+
+    @Resource
+    private PictureUtil pictureUtil;
 
     @ApiOperation(value = "新增药品")
     @PostMapping("/insertMedicine")
     @UserLoginToken
-    public CommonReturnType insertDepartment(@Valid @RequestBody MedicineInfo medicineInfo) {
+    public CommonReturnType insertDepartment(@Valid MedicineInfo medicineInfo,@RequestParam("medicinePicture") MultipartFile medicinePic) throws SftpException, JSchException, JsonProcessingException {
+
+        String pic = pictureUtil.getPicUrl(medicinePic);
+        medicineInfo.setMedicinePic(pic);
         MedicineInfo  medicineInfoVO= medicineInfoService.insertDepartment(medicineInfo);
         return CommonReturnType.creat(medicineInfoVO);
     }

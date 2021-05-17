@@ -2,7 +2,6 @@ package com.fehead.diseaseCare.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
@@ -17,16 +16,14 @@ import com.fehead.diseaseCare.error.EmBusinessError;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IUserService;
 import com.fehead.diseaseCare.utility.DateUtil;
-import com.fehead.diseaseCare.utility.FtpUtil;
-import com.fehead.diseaseCare.utility.IDUtils;
 import com.fehead.diseaseCare.utility.JwtUtil;
+import com.fehead.diseaseCare.utility.PictureUtil;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -58,10 +51,10 @@ import java.util.List;
 public class UserController extends BaseController{
 
     @Resource
-    private FtpUtil ftpUtil;
-
-    @Autowired
     private IUserService userService;
+
+    @Resource
+    private PictureUtil pictureUtil;
 
 
     @ApiOperation(value = "测试方法")
@@ -136,9 +129,7 @@ public class UserController extends BaseController{
         }
         int age = DateUtil.getAgeByBirth(date);
 
-        Object result = uploadPicture(avatar);
-        String cover = new ObjectMapper().writeValueAsString(result);
-        String avatarUrl= cover.replace("\"", "");
+        String avatarUrl = pictureUtil.getPicUrl(avatar);
         user.setAvatar(avatarUrl);
         user.setAge(age);
         User insertUser = userService.createUser(user);
@@ -164,32 +155,6 @@ public class UserController extends BaseController{
         int userIdByToken = JwtUtil.getUserIdByToken().getUserId();
         List<UserBaseInfo>patientList=userService.getAllPatientByDoctorId(userIdByToken);
         return CommonReturnType.creat(patientList);
-    }
-
-    // 上传图片拿到地址
-    public Object uploadPicture(MultipartFile uploadFile) throws BusinessException, JSchException, SftpException {
-        //1.给上传的图片生成新的文件名
-        //1.1获取原始文件名getAcitivity
-        String oldName=uploadFile.getOriginalFilename();
-        //1.2使用IDUtils工具类生成新的文件名，新的文件名=newName+文件后缀
-        String newName= IDUtils.getImageName();
-        assert oldName!=null;
-        newName=newName+oldName.substring(oldName.lastIndexOf("."));
-        //1.3生成文件在服务器端存储的子目录
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDateTime localDateTime=LocalDateTime.now();
-        String filePath = "/"+localDateTime.format(formatter)+"/";
-
-        //2.把图片上传到图片服务器
-        //2.1获取上传的io流
-        InputStream inputStream=null;
-        try {
-            inputStream=uploadFile.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //2.2调用FtpUtil工具进行上传
-        return ftpUtil.putImages(inputStream,filePath,newName);
     }
 
 }

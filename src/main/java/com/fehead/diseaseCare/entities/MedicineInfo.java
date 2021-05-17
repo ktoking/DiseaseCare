@@ -50,5 +50,8 @@ public class MedicineInfo implements Serializable {
     @NotNull(message = "药品库存不能为空")
     private Integer medicineRepertory;
 
+    @ApiModelProperty(value = "药品图片")
+    private String medicinePic;
+
 
 }
