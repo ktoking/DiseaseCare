@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, MedicineInfo> implements IMedicineInfoService {
 
-    public static final int PAGE_SIZE=10;
+    public static final int PAGE_SIZE=5;
 
     @Resource
     private MedicineInfoMapper medicineInfoMapper;
@@ -69,5 +69,10 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
             throw new BusinessException(EmBusinessError.DATA_DELETE_ERROR,e.getMessage());
         }
         return delete;
+    }
+
+    @Override
+    public int updateMedicineById(MedicineInfo medicineInfo) {
+        return medicineInfoMapper.updateById(medicineInfo);
     }
 }

@@ -22,4 +22,6 @@ public interface IMedicineInfoService extends IService<MedicineInfo> {
     List<MedicineInfo> getAllMedicine(Integer page);
 
     int deleteMedicineById(Integer medicineId);
+
+    int updateMedicineById(MedicineInfo medicineInfo);
 }

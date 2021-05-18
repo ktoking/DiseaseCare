@@ -59,6 +59,17 @@ public class MedicineInfoController extends BaseController{
         return CommonReturnType.creat(medicineInfoList);
     }
 
+    @ApiOperation(value = "修改药品信息")
+    @PostMapping("/updateMedicineById")
+    @UserLoginToken
+    public CommonReturnType updateMedicineById(@Valid MedicineInfo medicineInfo,@RequestParam("medicinePicture") MultipartFile medicinePic) throws SftpException, JSchException, JsonProcessingException {
+
+        String pic = pictureUtil.getPicUrl(medicinePic);
+        medicineInfo.setMedicinePic(pic);
+        int update=medicineInfoService.updateMedicineById(medicineInfo);
+        return CommonReturnType.creat(update);
+    }
+
     @ApiOperation(value = "所有药品信息")
     @GetMapping("/getAllMedicine")
     @UserLoginToken
