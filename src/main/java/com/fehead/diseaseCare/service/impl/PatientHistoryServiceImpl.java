@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -87,6 +88,17 @@ public class PatientHistoryServiceImpl extends ServiceImpl<PatientHistoryMapper,
             int updateH = patientHistoryMapper.updateById(updateHistory);
             return updateHistory.getStatus();
         }
+    }
+
+    @Override
+    public List<User> getPatientByDoctorId(Integer doctorId) {
+        List<User> rtVal=new ArrayList<>();
+        List<PatientHistory> patientHistories = patientHistoryMapper.selectList(new QueryWrapper<PatientHistory>().lambda().eq(PatientHistory::getDoctorId, doctorId).select(PatientHistory::getPatientId)).stream().distinct().collect(Collectors.toList());
+        for (PatientHistory patientHistory : patientHistories) {
+            User user = userService.queruUserByUserId(patientHistory.getPatientId());
+            rtVal.add(user);
+        }
+        return rtVal;
     }
 
     public List<PatientHistoryResp> getHistoryByUserId(Integer userId,int status){

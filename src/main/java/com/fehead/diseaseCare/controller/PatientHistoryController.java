@@ -4,6 +4,7 @@ package com.fehead.diseaseCare.controller;
 import com.fehead.diseaseCare.aop.UserLoginToken;
 import com.fehead.diseaseCare.controller.vo.req.PatientHistoryReq;
 import com.fehead.diseaseCare.controller.vo.resp.patientHistoryResp.PatientHistoryResp;
+import com.fehead.diseaseCare.entities.User;
 import com.fehead.diseaseCare.entities.model.UserIdRoleInfo;
 import com.fehead.diseaseCare.response.CommonReturnType;
 import com.fehead.diseaseCare.service.IPatientHistoryService;
@@ -46,6 +47,14 @@ public class PatientHistoryController {
     public CommonReturnType getHistoryByPatientId(@RequestParam Integer doctorId) {
         List<PatientHistoryResp> historyByUserId = patientHistoryService.getHistoryByDoctorId(doctorId);
         return CommonReturnType.creat(historyByUserId);
+    }
+
+    @ApiOperation(value = "医生查看名下看过病的病人信息")
+    @GetMapping("/getPatientByDoctorId")
+    @UserLoginToken
+    public CommonReturnType getPatientByDoctorId(@RequestParam Integer doctorId) {
+        List<User> patients = patientHistoryService.getPatientByDoctorId(doctorId);
+        return CommonReturnType.creat(patients);
     }
 
     @ApiOperation(value = "医生创建患者看病记录")
