@@ -1,6 +1,8 @@
 package com.fehead.diseaseCare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fehead.diseaseCare.controller.vo.resp.departmentResp.DepartmentTypeWithNameResp;
 import com.fehead.diseaseCare.controller.vo.resp.departmentResp.DepartmentWithDoctorResp;
@@ -13,9 +15,9 @@ import com.fehead.diseaseCare.mapper.DepartmentsMapper;
 import com.fehead.diseaseCare.mapper.UserMapper;
 import com.fehead.diseaseCare.service.IDepartmentsService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,10 +33,12 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentsServiceImpl extends ServiceImpl<DepartmentsMapper, Departments> implements IDepartmentsService {
 
-    @Autowired
+    public static final int PAGE_SIZE=10;
+
+    @Resource
     private DepartmentsMapper departmentsMapper;
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
     @Override
@@ -48,8 +52,9 @@ public class DepartmentsServiceImpl extends ServiceImpl<DepartmentsMapper, Depar
     }
 
     @Override
-    public List<Departments> getAllDepartment() {
-        List<Departments> list = departmentsMapper.selectList(new QueryWrapper<>());
+    public List<Departments> getAllDepartmentByPage(Integer page) {
+        Page<Departments> departmentsPage = new Page<>(page,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
+        List<Departments> list = departmentsMapper.selectPage(departmentsPage,new QueryWrapper<>()).getRecords();
         return list;
     }
 
@@ -147,5 +152,17 @@ public class DepartmentsServiceImpl extends ServiceImpl<DepartmentsMapper, Depar
     @Override
     public Departments queryDepartmentById(Integer deptId) {
         return departmentsMapper.selectById(deptId);
+    }
+
+    @Override
+    public Long getDepartmentPage() {
+        Page<Departments> departmentsPage = new Page<>(1,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
+        IPage<Departments> listPage = departmentsMapper.selectPage(departmentsPage, new QueryWrapper<Departments>());
+        return listPage.getPages();
+    }
+
+    @Override
+    public List<Departments> getAllDepartment() {
+        return departmentsMapper.selectList(new QueryWrapper<>());
     }
 }

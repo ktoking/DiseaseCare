@@ -46,8 +46,8 @@ public class DepartmentsController extends BaseController{
     @ApiOperation(value = "所有科室信息")
     @GetMapping("/getAllDepartment")
     @UserLoginToken
-    public CommonReturnType getAllDepartment() {
-        List<Departments> list = departmentsService.getAllDepartment();
+    public CommonReturnType getAllDepartment(@RequestParam(required = false,defaultValue = "1") Integer page) {
+        List<Departments> list = departmentsService.getAllDepartmentByPage(page);
         return CommonReturnType.creat(list);
     }
 
@@ -73,6 +73,14 @@ public class DepartmentsController extends BaseController{
     public CommonReturnType getDepartmentByNameFuzzy(@RequestParam("type") String type) {
         List<Departments> departmentByNameFuzzy = departmentsService.getDepartmentByNameFuzzy(type);
         return CommonReturnType.creat(departmentByNameFuzzy);
+    }
+
+    @ApiOperation(value = "查询科室总页数")
+    @GetMapping("/getDepartmentPage")
+    @UserLoginToken
+    public CommonReturnType getDepartmentPage() {
+        Long page = departmentsService.getDepartmentPage();
+        return CommonReturnType.creat(page);
     }
 
     @ApiOperation(value = "所有课室信息选择器")

@@ -75,4 +75,10 @@ public class MedicineInfoServiceImpl extends ServiceImpl<MedicineInfoMapper, Med
     public int updateMedicineById(MedicineInfo medicineInfo) {
         return medicineInfoMapper.updateById(medicineInfo);
     }
+
+    @Override
+    public Long getPageNum() {
+        IPage<MedicineInfo> listPage = medicineInfoMapper.selectPage(new Page<MedicineInfo>(1,PAGE_SIZE), new QueryWrapper<MedicineInfo>());
+        return listPage.getPages();
+    }
 }

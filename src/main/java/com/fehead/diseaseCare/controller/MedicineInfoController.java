@@ -78,6 +78,15 @@ public class MedicineInfoController extends BaseController{
         return CommonReturnType.creat(medicineInfoList);
     }
 
+    @ApiOperation(value = "获取药品分页总页数")
+    @GetMapping("/getPageNum")
+    @UserLoginToken
+    public CommonReturnType getPageNum() {
+        Long pageNum=medicineInfoService.getPageNum();
+        return CommonReturnType.creat(pageNum);
+    }
+
+
     @ApiOperation(value = "删除药品信息")
     @PostMapping("/deleteMedicineById")
     @UserLoginToken

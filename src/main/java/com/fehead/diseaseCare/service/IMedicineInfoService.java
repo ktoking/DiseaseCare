@@ -24,4 +24,6 @@ public interface IMedicineInfoService extends IService<MedicineInfo> {
     int deleteMedicineById(Integer medicineId);
 
     int updateMedicineById(MedicineInfo medicineInfo);
+
+    Long getPageNum();
 }

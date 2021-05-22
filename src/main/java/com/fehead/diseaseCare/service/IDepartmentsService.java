@@ -20,7 +20,7 @@ public interface IDepartmentsService extends IService<Departments> {
     // 新增科室
     Departments insertDepartment(Departments department);
 
-    List<Departments> getAllDepartment();
+    List<Departments> getAllDepartmentByPage(Integer page);
 
     int deleteDepartmentById(Integer departmentId);
 
@@ -34,4 +34,7 @@ public interface IDepartmentsService extends IService<Departments> {
 
     Departments queryDepartmentById(Integer deptId);
 
+    List<Departments> getAllDepartment();
+
+    Long getDepartmentPage();
 }
