@@ -69,9 +69,17 @@ public class UserController extends BaseController{
     @ApiOperation(value = "获取所有医生信息")
     @GetMapping("/getAllDoctors")
     @UserLoginToken
-    public CommonReturnType getAllDoctors() {
-        List<UserBaseInfo> userDoctors = userService.queryAllDoctor();
+    public CommonReturnType getAllDoctors(@RequestParam(required = false,defaultValue = "1") Integer page) {
+        List<UserBaseInfo> userDoctors = userService.queryAllDoctor(page);
         return CommonReturnType.creat(userDoctors);
+    }
+
+    @ApiOperation(value = "获取所有医生总页数")
+    @GetMapping("/getDoctorPage")
+    @UserLoginToken
+    public CommonReturnType getDoctorPage() {
+        Long page = userService.getDoctorPage();
+        return CommonReturnType.creat(page);
     }
 
     @ApiOperation(value = "用户充值")

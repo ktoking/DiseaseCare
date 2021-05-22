@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fehead.diseaseCare.entities.Departments;
 import com.fehead.diseaseCare.entities.User;
@@ -31,6 +32,8 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+
+    public static final int PAGE_SIZE=5;
 
     @Resource
     private UserMapper userMapper;
@@ -87,12 +90,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public List<UserBaseInfo> queryAllDoctor() {
+    public List<UserBaseInfo> queryAllDoctor(Integer page) {
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("role",1);
-        List<User> users = userMapper.selectList(queryWrapper);
-        List<UserBaseInfo> userDoctors=new ArrayList<>();
+        Page<User> userPage = new Page<>(page,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
+        List<User> users = userMapper.selectPage(userPage,queryWrapper).getRecords();
 
+        List<UserBaseInfo> userDoctors=new ArrayList<>();
         for (User user : users) {
             UserBaseInfo userDoctor=new UserBaseInfo();
             QueryWrapper<Departments> departmentsQueryWrapper=new QueryWrapper<>();
@@ -127,6 +131,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public User queruUserByUserId(Integer userId) {
         return userMapper.selectById(userId);
+    }
+
+    @Override
+    public Long getDoctorPage() {
+        Page<User> userPage = new Page<>(1,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
+        return userMapper.selectPage(userPage,new QueryWrapper<>()).getPages();
     }
 
     @Override

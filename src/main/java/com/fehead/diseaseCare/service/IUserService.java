@@ -26,11 +26,13 @@ public interface IUserService extends IService<User> {
     // 用户充钱
     boolean chargeMoney(BigDecimal money,Integer userId);
 
-    List<UserBaseInfo> queryAllDoctor();
+    List<UserBaseInfo> queryAllDoctor(Integer page);
 
     List<UserBaseInfo> getAllPatientByDoctorId(int doctorId);
 
     User queruUserByUserId(Integer userId);
 
     int updateByUserId(User user);
+
+    Long getDoctorPage();
 }
