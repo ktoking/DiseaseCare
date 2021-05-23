@@ -4,6 +4,7 @@ package com.fehead.diseaseCare.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fehead.diseaseCare.aop.PassToken;
 import com.fehead.diseaseCare.aop.UserLoginToken;
+import com.fehead.diseaseCare.controller.vo.req.DoctorInfoReq;
 import com.fehead.diseaseCare.controller.vo.req.UserAuthReq;
 import com.fehead.diseaseCare.controller.vo.req.UserInsertReq;
 import com.fehead.diseaseCare.controller.vo.req.UserRoleInfoReq;
@@ -33,6 +34,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -163,6 +165,34 @@ public class UserController extends BaseController{
         int userIdByToken = JwtUtil.getUserIdByToken().getUserId();
         List<UserBaseInfo>patientList=userService.getAllPatientByDoctorId(userIdByToken);
         return CommonReturnType.creat(patientList);
+    }
+
+    @ApiOperation(value = "新增医生")
+    @PostMapping("/insertDoctor")
+    @UserLoginToken
+    public CommonReturnType insertDepartment(@Valid DoctorInfoReq doctorInfoReq, @RequestParam("doctorAvatar") MultipartFile doctorAvatar) throws SftpException, JSchException, JsonProcessingException {
+        String pic = pictureUtil.getPicUrl(doctorAvatar);
+        User user=new User();
+        user.setAvatar(pic);
+        user.setName(doctorInfoReq.getName());
+        user.setRole(1);
+        user.setPhone(doctorInfoReq.getPhone());
+        user.setPassword("123123");
+        user.setSex(doctorInfoReq.getSex().equals("男")?1:0);
+
+        LocalDateTime date = DateUtil.stringTolocaldateTime(doctorInfoReq.getBirthday());
+        user.setBirthday(date);
+        user.setAge(DateUtil.getAgeByBirth(DateUtil.LocalDateTimeToDate(date)));
+
+        user.setCreateTime(LocalDateTime.now());
+        user.setFloor(doctorInfoReq.getFloor());
+        user.setRoomName(doctorInfoReq.getRoom());
+        user.setSeat(doctorInfoReq.getSeat());
+        user.setDepartmentId(doctorInfoReq.getDepartmentId());
+        user.setInfo(doctorInfoReq.getInfo());
+
+        User newDoctor = userService.createUser(user);
+        return CommonReturnType.creat(newDoctor);
     }
 
 }

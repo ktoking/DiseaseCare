@@ -2,6 +2,8 @@ package com.fehead.diseaseCare.utility;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
 public class DateUtil {
 
     static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     public static String localdateTimeToFormatString(LocalDateTime localDateTime){
         String localTime = df.format(localDateTime);
@@ -28,6 +31,14 @@ public class DateUtil {
         LocalDateTime todayEnd = LocalDateTime.of(time.toLocalDate(), LocalTime.MAX);// 当天开始
         return todayEnd;
     }
+
+    public static Date LocalDateTimeToDate(LocalDateTime localDateTime){
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        Date date = Date.from(zdt.toInstant());
+        return date;
+    }
+
     public static int getAgeByBirth(Date birthday){
         //Calendar：日历
         /*从Calendar对象中或得一个Date对象*/
