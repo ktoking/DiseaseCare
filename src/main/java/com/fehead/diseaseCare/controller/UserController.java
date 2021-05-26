@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -195,5 +196,47 @@ public class UserController extends BaseController{
         return CommonReturnType.creat(newDoctor);
     }
 
+    @ApiOperation(value = "删除医生")
+    @PostMapping("/deleteDoctor")
+    @UserLoginToken
+    public CommonReturnType deleteDoctor(@RequestBody Map<String, Integer> requestMap){
+        int delete=userService.deleteDoctor(requestMap.get("doctorId"));
+        return CommonReturnType.creat(delete);
+    }
+
+    @ApiOperation(value = "修改医生信息")
+    @PostMapping("/updateDoctorById")
+    @UserLoginToken
+    public CommonReturnType updateDoctorById(@Valid DoctorInfoReq doctorInfoReq, @RequestParam("doctorAvatar") MultipartFile doctorAvatar) throws SftpException, JSchException, JsonProcessingException {
+        String pic = pictureUtil.getPicUrl(doctorAvatar);
+        User user=new User();
+        user.setId(doctorInfoReq.getId());
+        user.setAvatar(pic);
+        user.setName(doctorInfoReq.getName());
+        user.setRole(1);
+        user.setPhone(doctorInfoReq.getPhone());
+
+        user.setSex(doctorInfoReq.getSex().equals("男")?1:0);
+
+        LocalDateTime date = DateUtil.stringTolocaldateTime(doctorInfoReq.getBirthday());
+        user.setBirthday(date);
+        user.setAge(DateUtil.getAgeByBirth(DateUtil.LocalDateTimeToDate(date)));
+
+        user.setFloor(doctorInfoReq.getFloor());
+        user.setRoomName(doctorInfoReq.getRoom());
+        user.setSeat(doctorInfoReq.getSeat());
+        user.setDepartmentId(doctorInfoReq.getDepartmentId());
+
+        int delete=userService.updateDoctorById(user);
+        return CommonReturnType.creat(delete);
+    }
+
+    @ApiOperation(value = "模糊查询医生信息")
+    @GetMapping("/queryDoctorByNameFuzzy")
+    @UserLoginToken
+    public CommonReturnType queryDoctorByNameFuzzy(@RequestParam("doctorName") String doctorName){
+        List<UserBaseInfo> doctorList=userService.queryDoctorByNameFuzzy(doctorName);
+        return CommonReturnType.creat(doctorList);
+    }
 }
 

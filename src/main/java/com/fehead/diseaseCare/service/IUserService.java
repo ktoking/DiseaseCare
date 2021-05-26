@@ -1,7 +1,7 @@
 package com.fehead.diseaseCare.service;
 
-import com.fehead.diseaseCare.entities.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fehead.diseaseCare.entities.User;
 import com.fehead.diseaseCare.entities.model.UserBaseInfo;
 
 import java.math.BigDecimal;
@@ -35,4 +35,10 @@ public interface IUserService extends IService<User> {
     int updateByUserId(User user);
 
     Long getDoctorPage();
+
+    int deleteDoctor(Integer doctorId);
+
+    int updateDoctorById(User updateUser);
+
+    List<UserBaseInfo> queryDoctorByNameFuzzy(String doctorName);
 }

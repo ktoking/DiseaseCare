@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -137,6 +138,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Long getDoctorPage() {
         Page<User> userPage = new Page<>(1,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
         return userMapper.selectPage(userPage,new QueryWrapper<>()).getPages();
+    }
+
+    @Override
+    public int deleteDoctor(Integer doctorId) {
+        User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getId,doctorId).eq(User::getRole,1));
+        if(user==null){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR,"用户不存在");
+        }else {
+            return userMapper.deleteById(doctorId);
+        }
+    }
+
+    @Override
+    public int updateDoctorById(User updateUser) {
+        User user = userMapper.selectById(updateUser.getId());
+        if(user==null){
+            throw new BusinessException(EmBusinessError.DATA_SELECT_ERROR,"用户不存在");
+        }else {
+            return userMapper.updateById(updateUser);
+        }
+    }
+
+    @Override
+    public List<UserBaseInfo> queryDoctorByNameFuzzy(String doctorName) {
+        List<UserBaseInfo> rtList = userMapper.selectList(new QueryWrapper<User>().lambda().eq(User::getRole, 1).likeRight(User::getName, doctorName))
+                .stream().map(e -> {
+                    UserBaseInfo rt = new UserBaseInfo();
+                    BeanUtils.copyProperties(e, rt);
+                    Departments departments = departmentsMapper.selectOne(new QueryWrapper<Departments>().lambda().eq(Departments::getId, e.getDepartmentId()));
+                    if (departments != null) {
+                        rt.setDepartments(departments);
+                    }
+                    return rt;
+                }).collect(Collectors.toList());
+        return rtList;
     }
 
     @Override

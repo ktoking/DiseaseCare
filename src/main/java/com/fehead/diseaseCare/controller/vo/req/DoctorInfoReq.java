@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class DoctorInfoReq {
 
+    @ApiModelProperty(value = "用户ID")
+    private Integer id;
+
     @ApiModelProperty(value = "姓名")
     @NotBlank(message = "姓名不能为空")
     private String name;
@@ -42,7 +45,6 @@ public class DoctorInfoReq {
     private Integer departmentId;
 
     @ApiModelProperty(value = "简介信息")
-    @NotBlank(message = "简介信息不能为空")
     private String info;
 
 }

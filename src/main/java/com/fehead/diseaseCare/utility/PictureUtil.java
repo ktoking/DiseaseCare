@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fehead.diseaseCare.error.BusinessException;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +29,8 @@ public class PictureUtil {
         //1.2使用IDUtils工具类生成新的文件名，新的文件名=newName+文件后缀
         String newName= IDUtils.getImageName();
         assert oldName!=null;
-        newName=newName+oldName.substring(oldName.lastIndexOf("."));
+        String substring = StringUtils.substring(oldName,oldName.lastIndexOf("."));
+        newName=newName+substring;
         //1.3生成文件在服务器端存储的子目录
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDateTime localDateTime=LocalDateTime.now();
