@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    public static final int PAGE_SIZE=5;
+    public static final int PAGE_SIZE=4;
 
     @Resource
     private UserMapper userMapper;
@@ -137,7 +137,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Long getDoctorPage() {
         Page<User> userPage = new Page<>(1,PAGE_SIZE);  // 查询第page页，每页返回PAGE_SIZE条
-        return userMapper.selectPage(userPage,new QueryWrapper<>()).getPages();
+        return userMapper.selectPage(userPage,new QueryWrapper<User>().lambda().eq(User::getRole,1)).getPages();
     }
 
     @Override
